@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug  1 15:03:07 2018
+Created in August 2018
 
 @author: Virginia Hinson
 
-Python beginning to use Named-entity recognition with spaCy
+Python beginning to use Named-entity recognition with spaCy.
+
+In order to repremand certain individuals or firms associated with CFA Institute, the FINRA 
+Monthly Disciplinary Actions PDF must be reviewed and the names and companies recorded to be checked. 
+In an effort to lower the hours spent combing through these FINRA PDFs, SpaCy has been utilized to 
+automatically recognize the named entities in the PDF headers after each case number.
+
 """
 
 from __future__ import unicode_literals, print_function
@@ -116,8 +122,8 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
     lowestIndex = 1000000
     monthIndex = -1
     
-	# The current month always occurs first in the document as a formatting rule: this foreach loop finds the first month 
-	# by finding the lowest index of first occurance and stores it for further use.
+    # The current month always occurs first in the document as a formatting rule: this foreach loop finds the first month 
+    # by finding the lowest index of first occurance and stores it for further use.
     for month in months:
         newIndex = new_data.find(month)
         if (newIndex != -1 and lowestIndex > newIndex):
@@ -127,11 +133,11 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
 
     currentMonthIndex = (monthIndex + 2) % 12
 	
-	# A regular expression splits the text file by each header using the standard "FINRA Case #[numbers]"
+    # A regular expression splits the text file by each header using the standard "FINRA Case #[numbers]"
     new_data_array_regex = standardre.compile('\(FINRA\n*\s\n*Case\n*\s\n*#\d+\)').split(new_data)
     
-	# The array is given one piece of data to be disregarded to tell Python it is an array of strings instead of 
-	# an array of characters.
+    # The array is given one piece of data to be disregarded to tell Python it is an array of strings instead of 
+    # an array of characters.
     new_data_array = ['The', 'the']
 	
     # Common words that are NOT important as named entities that exist in every FINRA document are replaced with 
