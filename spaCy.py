@@ -20,7 +20,7 @@ from pdfMiner import convert_pdf_to_txt
 # training data
 TRAIN_DATA = [
 
-	# Example data from several FINRA document headings
+    # Example data from several FINRA document headings
     ('Gates Capital Corporation (CRD® #29582, New York, New York), ', {
         'entities': [(0, 25, 'ORG'), (40, 48, 'LOC'), (50, 58, 'LOC')]
     }),
@@ -57,11 +57,11 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
         nlp = spacy.blank('en')  # create blank Language class
         print("Created blank 'en' model")
 
-	# A large portion of SpaCy funtionality here is open source code provided by the SpaCy project itself loading
-	# a pre-trained named entity recognizer trained on Wikipedia-- all portions provided are labeled as such.
+    # A large portion of SpaCy funtionality here is open source code provided by the SpaCy project itself loading
+    # a pre-trained named entity recognizer trained on Wikipedia-- all portions provided are labeled as such.
 	
 
-	# Provided: 
+    # Provided: 
 	
     # create the built-in pipeline components and add them to the pipeline
     # nlp.create_pipe works for built-ins that are registered with spaCy
@@ -101,10 +101,10 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
 
     print()    
     
-	# Original Code:
+    # Original Code:
 	
-	# This pulls from my personal file system and must be changed for each FINRA PDF. Future versions
-	# will ask for the filepath as a user input:
+    # This pulls from my personal file system and must be changed for each FINRA PDF. Future versions
+    # will ask for the filepath as a user input:
     new_data = convert_pdf_to_txt('C:\\Users\\vrh\\Downloads\\july_2018_Disciplinary_Actions.pdf')
     
     f =  open('test.txt', "w")
@@ -134,8 +134,8 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
 	# an array of characters.
     new_data_array = ['The', 'the']
 	
-	# Common words that are NOT important as named entities that exist in every FINRA document are replaced with 
-	# strings of length one:
+    # Common words that are NOT important as named entities that exist in every FINRA document are replaced with 
+    # strings of length one:
     for t in new_data_array_regex:
         t = t.replace('\n', ' ')
         
@@ -164,10 +164,10 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
         t = t.strip()
         t = standardre.sub('[\d+]', '', t)
         
-		# In order to isolate the headers, the section is further split at the month preceding the current month.
-		# According to the format of the document, this month is always the first word of the paragraph.
+        # In order to isolate the headers, the section is further split at the month preceding the current month.
+        # According to the format of the document, this month is always the first word of the paragraph.
 		
-		# Only the heading section needs to be considered when detecting the named entities.
+        # Only the heading section needs to be considered when detecting the named entities.
         s = t.split(firstMonth)
         print(len(s))
         print(s[0])
@@ -178,7 +178,7 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
     
     
     # Run multiple times in order to improve accuracy. 
-	# One example of this loop was provided by SpaCy.
+    # One example of this loop was provided by SpaCy.
     for new_text in new_data_array:
         doc = nlp(new_text)        
 
@@ -204,7 +204,7 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
     print('.')
     print('.')
 
-	# The entities found by SpaCy are printed to the user and saved to a file.
+    # The entities found by SpaCy are printed to the user and saved to a file.
     print(entities);
 
     file = open("FINRA_entities.txt", "a")
@@ -213,7 +213,7 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
         file.write(str(entity))
     file.close()
 
-	# Provided:
+    # Provided:
 
     # save model to output directory
     if output_dir is not None:
