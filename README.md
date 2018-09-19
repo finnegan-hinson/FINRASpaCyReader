@@ -6,8 +6,7 @@ Work from my internship at CFA Institute publically shared with permission.
 
   In the repository is the single source file, a Python program called SpaCy. The spaCy.py program uses the sample entity provider 
 code provided open source by the spaCy project as a base. (Which is available on their GitHub here: 
-https://github.com/explosion/spacy/blob/master/examples/information_extraction/entity_relations.py ) All instances of provided 
-code are clearly marked throughout.
+https://github.com/explosion/spacy/blob/master/examples/training/train_ner.py) All instances of provided code are clearly marked throughout.
 
   From a business perspective, the FINRASpaCyReader solves an issue when trying to detect affliates of CFA Institute in the financial 
 sector that have been involved in trouble. In order to repremand certain individuals or firms associated with CFA Institute, the FINRA 
@@ -20,7 +19,7 @@ but present in the PDF document.
 
   The accuracy tests were included both as a curiousity and as a testiment to the process and evolution of the program's accuracy over time. Because this is code previously developed, such progression is hard to track otherwise simply by looking at the commit history.
 
-  This code has been publicly published with the permission of CFA Institute and contains no customer information or data.
+  This code has been publicly published with the permission of CFA Institute and contains no customer/affiliate information or data.
 
   Thank you for taking the time to read over my code (and my disclaimers)! The FINRASpaCyReader was my first project in Python.
 
