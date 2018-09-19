@@ -19,6 +19,8 @@ from pdfMiner import convert_pdf_to_txt
 
 # training data
 TRAIN_DATA = [
+
+	# Example data from several FINRA document headings
     ('Gates Capital Corporation (CRD® #29582, New York, New York), ', {
         'entities': [(0, 25, 'ORG'), (40, 48, 'LOC'), (50, 58, 'LOC')]
     }),
@@ -55,8 +57,12 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
         nlp = spacy.blank('en')  # create blank Language class
         print("Created blank 'en' model")
 
+	# A large portion of SpaCy funtionality here is open source code provided by the SpaCy project itself loading
+	# a pre-trained named entity recognizer trained on Wikipedia-- all portions provided are labeled as such.
+	
 
-
+	# Provided: 
+	
     # create the built-in pipeline components and add them to the pipeline
     # nlp.create_pipe works for built-ins that are registered with spaCy
     if 'ner' not in nlp.pipe_names:
@@ -95,6 +101,10 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
 
     print()    
     
+	# Original Code:
+	
+	# This pulls from my personal file system and must be changed for each FINRA PDF. Future versions
+	# will ask for the filepath as a user input:
     new_data = convert_pdf_to_txt('C:\\Users\\vrh\\Downloads\\july_2018_Disciplinary_Actions.pdf')
     
     f =  open('test.txt', "w")
@@ -106,6 +116,8 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
     lowestIndex = 1000000
     monthIndex = -1
     
+	# The current month always occurs first in the document as a formatting rule: this foreach loop finds the first month 
+	# by finding the lowest index of first occurance and stores it for further use.
     for month in months:
         newIndex = new_data.find(month)
         if (newIndex != -1 and lowestIndex > newIndex):
@@ -114,11 +126,16 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
             monthIndex = months.index(month)
 
     currentMonthIndex = (monthIndex + 2) % 12
-    
+	
+	# A regular expression splits the text file by each header using the standard "FINRA Case #[numbers]"
     new_data_array_regex = standardre.compile('\(FINRA\n*\s\n*Case\n*\s\n*#\d+\)').split(new_data)
-
     
+	# The array is given one piece of data to be disregarded to tell Python it is an array of strings instead of 
+	# an array of characters.
     new_data_array = ['The', 'the']
+	
+	# Common words that are NOT important as named entities that exist in every FINRA document are replaced with 
+	# strings of length one:
     for t in new_data_array_regex:
         t = t.replace('\n', ' ')
         
@@ -141,13 +158,16 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
         t = t.replace('\x0c', '')
         t = t.replace('2018', '')
         
-        
+        # The current month is replaced as is all white space.
         t = t.replace(months[currentMonthIndex], ' ')
         t = standardre.sub('[\s+]', ' ', t)
         t = t.strip()
         t = standardre.sub('[\d+]', '', t)
         
-
+		# In order to isolate the headers, the section is further split at the month preceding the current month.
+		# According to the format of the document, this month is always the first word of the paragraph.
+		
+		# Only the heading section needs to be considered when detecting the named entities.
         s = t.split(firstMonth)
         print(len(s))
         print(s[0])
@@ -158,6 +178,7 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
     
     
     # Run multiple times in order to improve accuracy. 
+	# One example of this loop was provided by SpaCy.
     for new_text in new_data_array:
         doc = nlp(new_text)        
 
@@ -176,9 +197,6 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
             if (ent.text, ent.label_) not in entities:
                 entities.extend([(ent.text, ent.label_)])
         
-        # entities.extend([(ent.text, ent.label_) for ent in doc.ents])
-        # print([(ent.text, ent.label_) for ent in doc.ents])
-        
     print('.')
     print('.')
     print('.')
@@ -186,12 +204,8 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
     print('.')
     print('.')
 
+	# The entities found by SpaCy are printed to the user and saved to a file.
     print(entities);
-    
-   # doc = nlp(new_data)
-   # print('Entities', [(ent.text, ent.label_) for ent in doc.ents])
-   # print('Tokens', [(t.text, t.ent_type_, t.ent_iob) for t in doc])
-
 
     file = open("FINRA_entities.txt", "a")
     for entity in entities :
@@ -199,9 +213,7 @@ def main(model= "xx_ent_wiki_sm", output_dir=None, n_iter=100):
         file.write(str(entity))
     file.close()
 
-   # doc = nlp(new_data)
-   # print('Entities', [(ent.text, ent.label_) for ent in doc.ents])
-   # print('Tokens', [(t.text, t.ent_type_, t.ent_iob) for t in doc])
+	# Provided:
 
     # save model to output directory
     if output_dir is not None:
